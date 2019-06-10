@@ -1,35 +1,69 @@
 package hello;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Teams {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long team_id;
+    @Column
     private String names;
-    private Long id_capitans;
-    private Long id_players;
+
+
+    @ManyToOne
+   @JoinColumn(name = "capitan_id")
+   private Players capitan;
 
 
 
-    protected Teams() {}
+    @OneToMany(mappedBy = "teams")
+    private List<Players> players;
 
-    public Teams(String names, Long id_capitans, Long id_players) {
+    public List<Players> getPlayers() {
+        return players;
+    }
+    public Players getCapitan() {
+        return capitan;
+    }
+
+    public void setCapitan(Players capitan) {
+        this.capitan = capitan;
+    }
+
+    public Long getTeam_id() {
+        return team_id;
+    }
+
+    public String getNames() {
+        return names;
+    }
+
+    public void setPlayers(List<Players> players) {
+        this.players = players;
+    }
+
+    public void setTeam_id(Long team_id) {
+        this.team_id = team_id;
+    }
+
+    public void setNames(String names) {
         this.names = names;
-        this.id_capitans = id_capitans;
-        this.id_players = id_players;
+    }
+
+
+
+    public Teams(String names, Players id_capitans) {
+        this.names = names;
     }
 
     @Override
     public String toString() {
         String format = String.format(
-                "Team[ names ='%s', capitan='%l', players='%l']",
-                names, id_capitans, id_players);
+                "Team[ names ='%s']");
         return format;
     }
 
